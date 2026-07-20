@@ -1,8 +1,8 @@
 worksheet:
   name: testing1_sales_overview__model
   tables:
-  - name: testing1_sales_overview__retail_sales_data_model
-    fqn: 0d4acf8a-1b64-4f5d-bcc4-9e50923fc88c
+  - name: testing1_sales_overview
+    fqn: 20bc4aab-91f8-420c-80df-28bdb55d19fc
   joins: []
   columns:
   - name: Category
