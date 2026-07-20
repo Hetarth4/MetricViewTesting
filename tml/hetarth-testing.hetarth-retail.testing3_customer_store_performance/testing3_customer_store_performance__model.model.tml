@@ -1,30 +1,25 @@
 worksheet:
   name: testing3_customer_store_performance
   tables:
-  - name: retail_sales_data_model
+  - name: testing3_customer_store_performance
     fqn: e232775d-6682-4751-8b2e-837d9a1248de
   joins: []
   columns:
-  - name: Customer_Region
+  - name: customer_region
     column_type: ATTRIBUTE
-    source_column: Customer_Region
-    source_table: retail_sales_data_model
-  - name: Store_State
+    formula: Customer_Region
+  - name: store_state
     column_type: ATTRIBUTE
-    source_column: Store_State
-    source_table: retail_sales_data_model
-  - name: Store_Type
+    formula: Store_State
+  - name: store_type
     column_type: ATTRIBUTE
-    source_column: Store_Type
-    source_table: retail_sales_data_model
-  - name: Transaction_Date
+    formula: Store_Type
+  - name: transaction_date
     column_type: ATTRIBUTE
-    source_column: Transaction_Date
-    source_table: retail_sales_data_model
-  - name: Transaction_Type
+    formula: Transaction_Date
+  - name: transaction_type
     column_type: ATTRIBUTE
-    source_column: Transaction_Type
-    source_table: retail_sales_data_model
+    formula: Transaction_Type
   - name: cost_amount
     formula: sum(Cost_Dollar_Amount)
     column_type: MEASURE
