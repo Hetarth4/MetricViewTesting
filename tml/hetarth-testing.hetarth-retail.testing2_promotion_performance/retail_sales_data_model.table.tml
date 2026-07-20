@@ -12,6 +12,15 @@ table:
     properties:
       column_type: ATTRIBUTE
     description: Product category for the promoted basket line.
+  - name: Cost_Dollar_Amount
+    db_column_name: Cost_Dollar_Amount
+    properties:
+      column_type: ATTRIBUTE
+  - name: Customer_Region
+    db_column_name: Customer_Region
+    properties:
+      column_type: ATTRIBUTE
+    description: Region where the customer resides.
   - name: Discount
     db_column_name: Discount
     properties:
@@ -47,8 +56,28 @@ table:
     db_column_name: Sales_Quantity
     properties:
       column_type: ATTRIBUTE
+  - name: Store_Region
+    db_column_name: Store_Region
+    properties:
+      column_type: ATTRIBUTE
+    description: Region of the selling store.
+  - name: Store_State
+    db_column_name: Store_State
+    properties:
+      column_type: ATTRIBUTE
+    description: State of the selling store.
+  - name: Store_Type
+    db_column_name: Store_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Format of the store where the transaction occurred.
   - name: Transaction_Date
     db_column_name: Transaction_Date
     properties:
       column_type: ATTRIBUTE
     description: Calendar date of the transaction.
+  - name: Transaction_Type
+    db_column_name: Transaction_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Sale, return, or exchange transaction classification.
