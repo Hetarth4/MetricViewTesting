@@ -15,7 +15,7 @@ dimensions:
 
   - name: store_region
     expr: Store_Region
-    comment: Region of the selling store.
+    comment: Region of the selling store. TESTINGGG
     display_name: Store Region
     synonyms:
       - region
