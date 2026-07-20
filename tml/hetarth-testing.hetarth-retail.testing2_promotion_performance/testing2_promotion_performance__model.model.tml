@@ -1,5 +1,5 @@
 worksheet:
-  name: testing2_promotion_performance__model
+  name: testing2_promotion_performance
   tables:
   - name: retail_sales_data_model
     fqn: e9fc1fea-cdc6-4072-b32f-381aed60f552
