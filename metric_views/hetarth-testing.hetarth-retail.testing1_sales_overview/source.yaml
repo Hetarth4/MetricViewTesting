@@ -39,7 +39,7 @@ dimensions:
 measures:
   - name: sales_amount
     expr: SUM(Sales_Dollar_Amount)
-    comment: Total sales amount at the selected grain.
+    comment: THIS IS A TESTTTTT
     display_name: Sales Amount
     format:
       type: currency
