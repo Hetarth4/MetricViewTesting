@@ -1,8 +1,8 @@
 worksheet:
   name: testing2_promotion_performance__model
   tables:
-  - name: testing2_promotion_performance__retail_sales_data_model
-    fqn: 0d4acf8a-1b64-4f5d-bcc4-9e50923fc88c
+  - name: retail_sales_data_model
+    fqn: e9fc1fea-cdc6-4072-b32f-381aed60f552
   joins: []
   columns:
   - name: Category
