@@ -7,14 +7,24 @@ worksheet:
   columns:
   - name: Category
     column_type: ATTRIBUTE
+    source_column: Category
+    source_table: retail_sales_data_model
   - name: Promotion_Brand
     column_type: ATTRIBUTE
+    source_column: Promotion_Brand
+    source_table: retail_sales_data_model
   - name: Promotion_Key
     column_type: ATTRIBUTE
+    source_column: Promotion_Key
+    source_table: retail_sales_data_model
   - name: Promotion_Region
     column_type: ATTRIBUTE
+    source_column: Promotion_Region
+    source_table: retail_sales_data_model
   - name: Transaction_Date
     column_type: ATTRIBUTE
+    source_column: Transaction_Date
+    source_table: retail_sales_data_model
   - name: avg_discount
     formula: average(Discount)
     column_type: MEASURE
