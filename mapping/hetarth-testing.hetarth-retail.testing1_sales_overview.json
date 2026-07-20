@@ -11,13 +11,13 @@
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "testing1_sales_overview_model",
     "ts_guid": "9399afd8-137a-4625-aab7-2588f56f46dd",
-    "updated_at": "2026-07-20T16:37:12.010489+00:00"
+    "updated_at": "2026-07-20T17:10:28.884864+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.testing1_sales_overview",
     "ts_object_type": "MODEL",
     "ts_logical_name": "testing1_sales_overview",
     "ts_guid": "1820c855-92a6-48ee-baf3-71e7033bf53a",
-    "updated_at": "2026-07-20T16:37:12.234889+00:00"
+    "updated_at": "2026-07-20T17:10:29.077198+00:00"
   }
 ]
