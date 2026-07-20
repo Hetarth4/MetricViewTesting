@@ -1,0 +1,100 @@
+version: 1.1
+
+source: SELECT * FROM `hetarth-testing`.`hetarth-retail`.retail_sales_data_model
+
+comment: Sales overview metrics for the retail sales model.
+
+dimensions:
+  - name: transaction_date
+    expr: Transaction_Date
+    comment: Calendar date of the transaction.
+    display_name: Transaction Date
+    format:
+      type: date
+      date_format: year_month_day
+
+  - name: store_region
+    expr: Store_Region
+    comment: Region of the selling store.
+    display_name: Store Region
+    synonyms:
+      - region
+      - sales region
+
+  - name: store_state
+    expr: Store_State
+    comment: State of the selling store.
+    display_name: Store State
+
+  - name: category
+    expr: Category
+    comment: Product category for the basket line.
+    display_name: Product Category
+
+  - name: transaction_type
+    expr: Transaction_Type
+    comment: "Sale, return, or exchange transaction classification."
+    display_name: Transaction Type
+
+measures:
+  - name: sales_amount
+    expr: SUM(Sales_Dollar_Amount)
+    comment: Total sales amount at the selected grain.
+    display_name: Sales Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+    synonyms:
+      - sales
+      - revenue
+
+  - name: cost_amount
+    expr: SUM(Cost_Dollar_Amount)
+    comment: Total product cost at the selected grain.
+    display_name: Cost Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: gross_profit_amount
+    expr: SUM(Gross_Profit_Dollar_Amount)
+    comment: Total gross profit at the selected grain.
+    display_name: Gross Profit Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+    synonyms:
+      - gross profit
+      - margin dollars
+
+  - name: sales_quantity
+    expr: SUM(Sales_Quantity)
+    comment: Net quantity sold including negative return lines.
+    display_name: Sales Quantity
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0
+
+  - name: transaction_count
+    expr: COUNT(DISTINCT POS_Transaction_Number)
+    comment: Distinct count of point-of-sale transactions.
+    display_name: Transaction Count
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0
+    synonyms:
+      - orders
+      - tickets
