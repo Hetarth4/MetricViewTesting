@@ -1,0 +1,87 @@
+version: 1.1
+
+source: SELECT * FROM `hetarth-testing`.`hetarth-retail`.retail_sales_data_model
+
+comment: Promotion performance metrics for the retail sales model.
+
+dimensions:
+  - name: transaction_date
+    expr: Transaction_Date
+    comment: Calendar date of the transaction.
+    display_name: Transaction Date
+    format:
+      type: date
+      date_format: year_month_day
+
+  - name: promotion_key
+    expr: Promotion_Key
+    comment: Promotion identifier applied to the basket line.
+    display_name: Promotion Key
+
+  - name: promotion_region
+    expr: Promotion_Region
+    comment: Region targeted by the promotion.
+    display_name: Promotion Region
+
+  - name: promotion_brand
+    expr: Promotion_Brand
+    comment: Brand associated with the promotion.
+    display_name: Promotion Brand
+
+  - name: category
+    expr: Category
+    comment: Product category for the promoted basket line.
+    display_name: Product Category
+
+measures:
+  - name: sales_amount
+    expr: SUM(Sales_Dollar_Amount)
+    comment: Total sales amount for the selected promotions.
+    display_name: Sales Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: gross_profit_amount
+    expr: SUM(Gross_Profit_Dollar_Amount)
+    comment: Total gross profit for the selected promotions.
+    display_name: Gross Profit Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: avg_discount
+    expr: AVG(Discount)
+    comment: Average discount rate recorded on promoted basket lines.
+    display_name: Average Discount
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: sales_quantity
+    expr: SUM(Sales_Quantity)
+    comment: Net quantity sold on lines with the selected promotion.
+    display_name: Sales Quantity
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0
+
+  - name: transaction_count
+    expr: COUNT(DISTINCT POS_Transaction_Number)
+    comment: Distinct transactions containing the selected promotion.
+    display_name: Transaction Count
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0
