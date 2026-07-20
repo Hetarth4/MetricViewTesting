@@ -1,37 +1,57 @@
-worksheet:
+model:
   name: testing1_sales_overview
-  tables:
-  - name: testing1_sales_overview
-    fqn: e232775d-6682-4751-8b2e-837d9a1248de
-  joins: []
+  model_tables:
+  - name: testing1_sales_overview_model
+    fqn: 9399afd8-137a-4625-aab7-2588f56f46dd
+  formulas:
+  - id: formula_transaction_count
+    name: transaction_count
+    expr: unique count([testing1_sales_overview_model::POS_Transaction_Number])
   columns:
   - name: category
-    column_type: ATTRIBUTE
-    formula: Category
+    column_id: testing1_sales_overview_model::Category
+    properties:
+      column_type: ATTRIBUTE
   - name: store_region
-    column_type: ATTRIBUTE
-    formula: Store_Region
+    column_id: testing1_sales_overview_model::Store_Region
+    properties:
+      column_type: ATTRIBUTE
   - name: store_state
-    column_type: ATTRIBUTE
-    formula: Store_State
+    column_id: testing1_sales_overview_model::Store_State
+    properties:
+      column_type: ATTRIBUTE
   - name: transaction_date
-    column_type: ATTRIBUTE
-    formula: Transaction_Date
+    column_id: testing1_sales_overview_model::Transaction_Date
+    properties:
+      column_type: ATTRIBUTE
   - name: transaction_type
-    column_type: ATTRIBUTE
-    formula: Transaction_Type
+    column_id: testing1_sales_overview_model::Transaction_Type
+    properties:
+      column_type: ATTRIBUTE
   - name: cost_amount
-    formula: sum(Cost_Dollar_Amount)
-    column_type: MEASURE
+    column_id: testing1_sales_overview_model::Cost_Dollar_Amount
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: gross_profit_amount
-    formula: sum(Gross_Profit_Dollar_Amount)
-    column_type: MEASURE
+    column_id: testing1_sales_overview_model::Gross_Profit_Dollar_Amount
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: sales_amount
-    formula: sum(Sales_Dollar_Amount)
-    column_type: MEASURE
+    column_id: testing1_sales_overview_model::Sales_Dollar_Amount
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: sales_quantity
-    formula: sum(Sales_Quantity)
-    column_type: MEASURE
+    column_id: testing1_sales_overview_model::Sales_Quantity
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: transaction_count
-    formula: unique_count(POS_Transaction_Number)
-    column_type: MEASURE
+    formula_id: formula_transaction_count
+    properties:
+      column_type: MEASURE
+  properties:
+    join_progressive: true
+    is_bypass_rls: false
