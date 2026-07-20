@@ -1,5 +1,6 @@
+guid: 20bc4aab-91f8-420c-80df-28bdb55d19fc
 worksheet:
-  name: testing1_sales_overview__model
+  name: testing1_sales_overview
   tables:
   - name: retail_sales_data_model
     fqn: e9fc1fea-cdc6-4072-b32f-381aed60f552
