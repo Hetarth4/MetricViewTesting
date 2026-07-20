@@ -1,4 +1,4 @@
-guid: e9fc1fea-cdc6-4072-b32f-381aed60f552
+guid: e232775d-6682-4751-8b2e-837d9a1248de
 table:
   name: retail_sales_data_model
   db: hetarth-testing
@@ -16,6 +16,15 @@ table:
     db_column_name: Cost_Dollar_Amount
     properties:
       column_type: ATTRIBUTE
+  - name: Customer_Region
+    db_column_name: Customer_Region
+    properties:
+      column_type: ATTRIBUTE
+    description: Region where the customer resides.
+  - name: Discount
+    db_column_name: Discount
+    properties:
+      column_type: ATTRIBUTE
   - name: Gross_Profit_Dollar_Amount
     db_column_name: Gross_Profit_Dollar_Amount
     properties:
@@ -24,6 +33,21 @@ table:
     db_column_name: POS_Transaction_Number
     properties:
       column_type: ATTRIBUTE
+  - name: Promotion_Brand
+    db_column_name: Promotion_Brand
+    properties:
+      column_type: ATTRIBUTE
+    description: Brand associated with the promotion.
+  - name: Promotion_Key
+    db_column_name: Promotion_Key
+    properties:
+      column_type: ATTRIBUTE
+    description: Promotion identifier applied to the basket line.
+  - name: Promotion_Region
+    db_column_name: Promotion_Region
+    properties:
+      column_type: ATTRIBUTE
+    description: Region targeted by the promotion.
   - name: Sales_Dollar_Amount
     db_column_name: Sales_Dollar_Amount
     properties:
@@ -42,6 +66,11 @@ table:
     properties:
       column_type: ATTRIBUTE
     description: State of the selling store.
+  - name: Store_Type
+    db_column_name: Store_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Format of the store where the transaction occurred.
   - name: Transaction_Date
     db_column_name: Transaction_Date
     properties:

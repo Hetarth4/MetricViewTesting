@@ -2,7 +2,7 @@ worksheet:
   name: testing1_sales_overview
   tables:
   - name: retail_sales_data_model
-    fqn: e9fc1fea-cdc6-4072-b32f-381aed60f552
+    fqn: e232775d-6682-4751-8b2e-837d9a1248de
   joins: []
   columns:
   - name: Category
