@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "fqn": "hetarth-testing.hetarth-retail.testing2_promotion_performance",
+    "ts_object_type": "LOGICAL_TABLE",
+    "ts_logical_name": "testing2_promotion_performance",
+    "ts_guid": "e232775d-6682-4751-8b2e-837d9a1248de",
+    "updated_at": "2026-07-20T15:15:47.351106+00:00"
+  }
+]

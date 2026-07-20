@@ -1,30 +1,25 @@
 worksheet:
   name: testing2_promotion_performance
   tables:
-  - name: retail_sales_data_model
+  - name: testing2_promotion_performance
     fqn: e232775d-6682-4751-8b2e-837d9a1248de
   joins: []
   columns:
-  - name: Category
+  - name: category
     column_type: ATTRIBUTE
-    source_column: Category
-    source_table: retail_sales_data_model
-  - name: Promotion_Brand
+    formula: Category
+  - name: promotion_brand
     column_type: ATTRIBUTE
-    source_column: Promotion_Brand
-    source_table: retail_sales_data_model
-  - name: Promotion_Key
+    formula: Promotion_Brand
+  - name: promotion_key
     column_type: ATTRIBUTE
-    source_column: Promotion_Key
-    source_table: retail_sales_data_model
-  - name: Promotion_Region
+    formula: Promotion_Key
+  - name: promotion_region
     column_type: ATTRIBUTE
-    source_column: Promotion_Region
-    source_table: retail_sales_data_model
-  - name: Transaction_Date
+    formula: Promotion_Region
+  - name: transaction_date
     column_type: ATTRIBUTE
-    source_column: Transaction_Date
-    source_table: retail_sales_data_model
+    formula: Transaction_Date
   - name: avg_discount
     formula: average(Discount)
     column_type: MEASURE
