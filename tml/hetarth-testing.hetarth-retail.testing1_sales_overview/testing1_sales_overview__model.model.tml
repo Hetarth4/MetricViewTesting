@@ -1,4 +1,3 @@
-guid: 20bc4aab-91f8-420c-80df-28bdb55d19fc
 worksheet:
   name: testing1_sales_overview
   tables:
@@ -8,14 +7,24 @@ worksheet:
   columns:
   - name: Category
     column_type: ATTRIBUTE
+    source_column: Category
+    source_table: retail_sales_data_model
   - name: Store_Region
     column_type: ATTRIBUTE
+    source_column: Store_Region
+    source_table: retail_sales_data_model
   - name: Store_State
     column_type: ATTRIBUTE
+    source_column: Store_State
+    source_table: retail_sales_data_model
   - name: Transaction_Date
     column_type: ATTRIBUTE
+    source_column: Transaction_Date
+    source_table: retail_sales_data_model
   - name: Transaction_Type
     column_type: ATTRIBUTE
+    source_column: Transaction_Type
+    source_table: retail_sales_data_model
   - name: cost_amount
     formula: sum(Cost_Dollar_Amount)
     column_type: MEASURE

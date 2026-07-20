@@ -1,16 +1,1 @@
-[
-  {
-    "fqn": "hetarth-testing.hetarth-retail.testing1_sales_overview",
-    "ts_object_type": "LOGICAL_TABLE",
-    "ts_logical_name": "testing1_sales_overview",
-    "ts_guid": "20bc4aab-91f8-420c-80df-28bdb55d19fc",
-    "updated_at": "2026-07-20T11:56:04.185401+00:00"
-  },
-  {
-    "fqn": "hetarth-testing.hetarth-retail.testing1_sales_overview",
-    "ts_object_type": "LOGICAL_TABLE",
-    "ts_logical_name": "testing1_sales_overview__retail_sales_data_model",
-    "ts_guid": "0d4acf8a-1b64-4f5d-bcc4-9e50923fc88c",
-    "updated_at": "2026-07-20T11:44:17.644524+00:00"
-  }
-]
+[]
