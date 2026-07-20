@@ -5,5 +5,19 @@
     "ts_logical_name": "testing2_promotion_performance",
     "ts_guid": "e232775d-6682-4751-8b2e-837d9a1248de",
     "updated_at": "2026-07-20T15:15:47.351106+00:00"
+  },
+  {
+    "fqn": "hetarth-testing.hetarth-retail.testing2_promotion_performance",
+    "ts_object_type": "LOGICAL_TABLE",
+    "ts_logical_name": "testing2_promotion_performance_model",
+    "ts_guid": "9399afd8-137a-4625-aab7-2588f56f46dd",
+    "updated_at": "2026-07-20T17:11:49.411095+00:00"
+  },
+  {
+    "fqn": "hetarth-testing.hetarth-retail.testing2_promotion_performance",
+    "ts_object_type": "MODEL",
+    "ts_logical_name": "testing2_promotion_performance",
+    "ts_guid": "b29e886d-f6c1-4bc5-8c67-b16453e66802",
+    "updated_at": "2026-07-20T17:11:49.612049+00:00"
   }
 ]
