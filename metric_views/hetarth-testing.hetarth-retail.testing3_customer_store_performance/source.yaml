@@ -1,0 +1,88 @@
+version: 1.1
+
+source: SELECT * FROM `hetarth-testing`.`hetarth-retail`.retail_sales_data_model
+
+comment: Customer and store performance metrics for the retail sales model.
+
+dimensions:
+  - name: transaction_date
+    expr: Transaction_Date
+    comment: Calendar date of the transaction.
+    display_name: Transaction Date
+    format:
+      type: date
+      date_format: year_month_day
+
+  - name: customer_region
+    expr: Customer_Region
+    comment: Region where the customer resides.
+    display_name: Customer Region
+
+  - name: store_state
+    expr: Store_State
+    comment: State of the selling store.
+    display_name: Store State
+
+  - name: store_type
+    expr: Store_Type
+    comment: Format of the store where the transaction occurred.
+    display_name: Store Type
+
+  - name: transaction_type
+    expr: Transaction_Type
+    comment: "Sale, return, or exchange transaction classification."
+    display_name: Transaction Type
+
+measures:
+  - name: sales_amount
+    expr: SUM(Sales_Dollar_Amount)
+    comment: Total sales amount for the selected customers and stores.
+    display_name: Sales Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: cost_amount
+    expr: SUM(Cost_Dollar_Amount)
+    comment: Total cost amount for the selected customers and stores.
+    display_name: Cost Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: gross_profit_amount
+    expr: SUM(Gross_Profit_Dollar_Amount)
+    comment: Total gross profit for the selected customers and stores.
+    display_name: Gross Profit Amount
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: sales_quantity
+    expr: SUM(Sales_Quantity)
+    comment: Net quantity sold for the selected customers and stores.
+    display_name: Sales Quantity
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0
+
+  - name: transaction_count
+    expr: COUNT(DISTINCT POS_Transaction_Number)
+    comment: Distinct transactions for the selected customers and stores.
+    display_name: Transaction Count
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 0

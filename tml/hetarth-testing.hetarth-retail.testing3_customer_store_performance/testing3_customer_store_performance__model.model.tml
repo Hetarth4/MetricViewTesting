@@ -1,0 +1,42 @@
+worksheet:
+  name: testing3_customer_store_performance
+  tables:
+  - name: retail_sales_data_model
+    fqn: e232775d-6682-4751-8b2e-837d9a1248de
+  joins: []
+  columns:
+  - name: Customer_Region
+    column_type: ATTRIBUTE
+    source_column: Customer_Region
+    source_table: retail_sales_data_model
+  - name: Store_State
+    column_type: ATTRIBUTE
+    source_column: Store_State
+    source_table: retail_sales_data_model
+  - name: Store_Type
+    column_type: ATTRIBUTE
+    source_column: Store_Type
+    source_table: retail_sales_data_model
+  - name: Transaction_Date
+    column_type: ATTRIBUTE
+    source_column: Transaction_Date
+    source_table: retail_sales_data_model
+  - name: Transaction_Type
+    column_type: ATTRIBUTE
+    source_column: Transaction_Type
+    source_table: retail_sales_data_model
+  - name: cost_amount
+    formula: sum(Cost_Dollar_Amount)
+    column_type: MEASURE
+  - name: gross_profit_amount
+    formula: sum(Gross_Profit_Dollar_Amount)
+    column_type: MEASURE
+  - name: sales_amount
+    formula: sum(Sales_Dollar_Amount)
+    column_type: MEASURE
+  - name: sales_quantity
+    formula: sum(Sales_Quantity)
+    column_type: MEASURE
+  - name: transaction_count
+    formula: unique_count(POS_Transaction_Number)
+    column_type: MEASURE
