@@ -1,0 +1,22 @@
+table:
+  name: sales_performance_metrics_model__header
+  db: hetarth-testing
+  schema: hetarth-retail
+  db_table: fact_order_header
+  connection:
+    fqn: c0318fd8-1ac6-4c32-b5ad-026cc2aabed5
+  columns:
+  - name: Tender_Type
+    db_column_name: Tender_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Payment method used
+  - name: Timestamp
+    db_column_name: Timestamp
+    properties:
+      column_type: ATTRIBUTE
+  - name: Transaction_Type
+    db_column_name: Transaction_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Purchase, Return, or Exchange

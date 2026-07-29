@@ -1,0 +1,28 @@
+table:
+  name: sales_performance_metrics_model
+  db: hetarth-testing
+  schema: hetarth-retail
+  db_table: fact_order_detail
+  connection:
+    fqn: c0318fd8-1ac6-4c32-b5ad-026cc2aabed5
+  columns:
+  - name: Cost_Dollar_Amount
+    db_column_name: Cost_Dollar_Amount
+    properties:
+      column_type: ATTRIBUTE
+  - name: Gross_Profit_Dollar_Amount
+    db_column_name: Gross_Profit_Dollar_Amount
+    properties:
+      column_type: ATTRIBUTE
+  - name: POS_Transaction_Number
+    db_column_name: POS_Transaction_Number
+    properties:
+      column_type: ATTRIBUTE
+  - name: Sales_Dollar_Amount
+    db_column_name: Sales_Dollar_Amount
+    properties:
+      column_type: ATTRIBUTE
+  - name: Sales_Quantity
+    db_column_name: Sales_Quantity
+    properties:
+      column_type: ATTRIBUTE

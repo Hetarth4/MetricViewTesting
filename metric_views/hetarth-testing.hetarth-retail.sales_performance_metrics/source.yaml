@@ -1,0 +1,81 @@
+version: 1.1
+
+source: '`hetarth-testing`.`hetarth-retail`.fact_order_detail'
+
+joins:
+  - name: header
+    source: '`hetarth-testing`.`hetarth-retail`.fact_order_header'
+    "on": source.POS_Transaction_Number = header.POS_Transaction_Number
+    rely:
+      at_most_one_match: true
+  - name: product
+    source: '`hetarth-testing`.`hetarth-retail`.dim_product'
+    "on": source.Product_Key = product.Product_Key
+    rely:
+      at_most_one_match: true
+
+comment: Sales performance KPIs across products and time periods
+
+dimensions:
+  - name: Order Date
+    expr: DATE(header.Timestamp)
+    comment: Date of the transaction
+
+  - name: Order Month
+    expr: "DATE_TRUNC('MONTH', header.Timestamp)"
+    comment: Month of the transaction
+
+  - name: Order Year
+    expr: YEAR(header.Timestamp)
+    comment: Year of the transaction
+
+  - name: Transaction Type
+    expr: header.Transaction_Type
+    comment: "Purchase, Return, or Exchange"
+
+  - name: Tender Type
+    expr: header.Tender_Type
+    comment: Payment method used
+
+  - name: Product Category
+    expr: product.Category
+    comment: "Product category (Grocery, Personal Care, etc.)"
+
+  - name: Product Brand
+    expr: product.Brand
+    comment: Product brand name
+
+  - name: Product Type
+    expr: product.Product
+    comment: Product type within category
+
+measures:
+  - name: Total Sales
+    expr: SUM(source.Sales_Dollar_Amount)
+    comment: Total sales revenue in dollars
+
+  - name: Total Cost
+    expr: SUM(source.Cost_Dollar_Amount)
+    comment: Total cost of goods sold
+
+  - name: Gross Profit
+    expr: SUM(source.Gross_Profit_Dollar_Amount)
+    comment: Total gross profit (Sales - Cost)
+
+  - name: Gross Margin Pct
+    expr: "SUM(source.Gross_Profit_Dollar_Amount) / NULLIF(SUM(source.Sales_Dollar_Amount),\
+      \ 0) * 100"
+    comment: Gross margin percentage
+
+  - name: Order Count
+    expr: COUNT(DISTINCT source.POS_Transaction_Number)
+    comment: Number of unique transactions
+
+  - name: Items Sold
+    expr: SUM(source.Sales_Quantity)
+    comment: Total quantity of items sold
+
+  - name: Avg Basket Value
+    expr: "SUM(source.Sales_Dollar_Amount) / NULLIF(COUNT(DISTINCT source.POS_Transaction_Number),\
+      \ 0)"
+    comment: Average dollar value per transaction
