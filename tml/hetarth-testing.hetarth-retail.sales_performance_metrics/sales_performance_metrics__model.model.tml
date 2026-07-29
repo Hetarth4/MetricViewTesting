@@ -1,81 +1,93 @@
+guid: e2747b5b-698f-52d8-bd2e-0a9a8792f822
 model:
   name: sales_performance_metrics
   model_tables:
-  - name: sales_performance_metrics_model
-    fqn: 3b84ea2f-5cf7-47dd-8436-802e0f4bd13d
+  - name: fact_order_detail
+    fqn: d19573df-e106-4b11-904a-fe0078da9c01
     joins:
-    - with: sales_performance_metrics_model__header
-      'on': '[sales_performance_metrics_model::source.POS_Transaction_Number = header.POS_Transaction_Number]'
+    - with: fact_order_header
+      'on': '[fact_order_detail::POS_Transaction_Number] = [fact_order_header::POS_Transaction_Number]'
       type: LEFT_OUTER
       cardinality: MANY_TO_ONE
-    - with: sales_performance_metrics_model__product
-      'on': '[sales_performance_metrics_model::source.Product_Key = product.Product_Key]'
+    - with: dim_product
+      'on': '[fact_order_detail::Product_Key] = [dim_product::Product_Key]'
       type: LEFT_OUTER
       cardinality: MANY_TO_ONE
-  - name: sales_performance_metrics_model__header
-    fqn: 53778eeb-0480-4540-9a94-74383d8f3608
-  - name: sales_performance_metrics_model__product
-    fqn: 3e665e33-7ce5-4990-92c3-0a05a4164333
+  - name: fact_order_header
+    fqn: a3d34975-6a7e-4168-ac9a-8099d757e0b2
+  - name: dim_product
+    fqn: 76a6f2a0-cba3-4144-b1de-3e737040a27e
+  description: 'Sales performance KPIs across products and time periods. Measures
+    include total sales, gross profit, margin %, order count, items sold, and average
+    basket value. Dimensions cover order date/month/year, product category/brand/type,
+    transaction type, and tender type. Source: fact_order_detail joined to fact_order_header
+    and dim_product.'
   formulas:
+  - id: formula_Order_Date
+    name: Order Date
+    expr: date([fact_order_header::Timestamp])
+    description: Date of the transaction
   - id: formula_Order_Month
     name: Order Month
-    expr: start_of_month([sales_performance_metrics_model::header].Timestamp)
+    expr: start_of_month([fact_order_header::Timestamp])
     description: Month of the transaction
+  - id: formula_Order_Year
+    name: Order Year
+    expr: year([fact_order_header::Timestamp])
+    description: Year of the transaction
   - id: formula_Avg_Basket_Value
     name: Avg Basket Value
-    expr: sum([sales_performance_metrics_model::source].[sales_performance_metrics_model::Sales_Dollar_Amount])
-      / [sales_performance_metrics_model::NULLIF](COUNT(DISTINCT [sales_performance_metrics_model::source].[sales_performance_metrics_model::POS_Transaction_Number]),
+    expr: sum([fact_order_detail::Sales_Dollar_Amount]) / nullif(unique count([fact_order_detail::POS_Transaction_Number]),
       0)
     description: Average dollar value per transaction
-  - id: formula_Gross_Profit
-    name: Gross Profit
-    expr: sum([sales_performance_metrics_model::source].[sales_performance_metrics_model::Gross_Profit_Dollar_Amount])
-    description: Total gross profit (Sales - Cost)
-  - id: formula_Items_Sold
-    name: Items Sold
-    expr: sum([sales_performance_metrics_model::source].[sales_performance_metrics_model::Sales_Quantity])
-    description: Total quantity of items sold
+  - id: formula_Gross_Margin_Pct
+    name: Gross Margin Pct
+    expr: sum([fact_order_detail::Gross_Profit_Dollar_Amount]) / nullif(sum([fact_order_detail::Sales_Dollar_Amount]),
+      0) * 100
+    description: Gross margin percentage
   - id: formula_Order_Count
     name: Order Count
-    expr: unique count([sales_performance_metrics_model::source].[sales_performance_metrics_model::POS_Transaction_Number])
+    expr: unique count([fact_order_detail::POS_Transaction_Number])
     description: Number of unique transactions
-  - id: formula_Total_Cost
-    name: Total Cost
-    expr: sum([sales_performance_metrics_model::source].[sales_performance_metrics_model::Cost_Dollar_Amount])
-    description: Total cost of goods sold
-  - id: formula_Total_Sales
-    name: Total Sales
-    expr: sum([sales_performance_metrics_model::source].[sales_performance_metrics_model::Sales_Dollar_Amount])
-    description: Total sales revenue in dollars
   columns:
+  - name: Order Date
+    description: Date of the transaction
+    formula_id: formula_Order_Date
+    properties:
+      column_type: ATTRIBUTE
   - name: Order Month
     description: Month of the transaction
     formula_id: formula_Order_Month
     properties:
       column_type: ATTRIBUTE
+  - name: Order Year
+    description: Year of the transaction
+    formula_id: formula_Order_Year
+    properties:
+      column_type: ATTRIBUTE
   - name: Product Brand
     description: Product brand name
-    column_id: sales_performance_metrics_model__product::Brand
+    column_id: dim_product::Brand
     properties:
       column_type: ATTRIBUTE
   - name: Product Category
     description: Product category (Grocery, Personal Care, etc.)
-    column_id: sales_performance_metrics_model__product::Category
+    column_id: dim_product::Category
     properties:
       column_type: ATTRIBUTE
   - name: Product Type
     description: Product type within category
-    column_id: sales_performance_metrics_model__product::Product
+    column_id: dim_product::Product
     properties:
       column_type: ATTRIBUTE
   - name: Tender Type
     description: Payment method used
-    column_id: sales_performance_metrics_model__header::Tender_Type
+    column_id: fact_order_header::Tender_Type
     properties:
       column_type: ATTRIBUTE
   - name: Transaction Type
     description: Purchase, Return, or Exchange
-    column_id: sales_performance_metrics_model__header::Transaction_Type
+    column_id: fact_order_header::Transaction_Type
     properties:
       column_type: ATTRIBUTE
   - name: Avg Basket Value
@@ -83,16 +95,23 @@ model:
     formula_id: formula_Avg_Basket_Value
     properties:
       column_type: MEASURE
+  - name: Gross Margin Pct
+    description: Gross margin percentage
+    formula_id: formula_Gross_Margin_Pct
+    properties:
+      column_type: MEASURE
   - name: Gross Profit
     description: Total gross profit (Sales - Cost)
-    formula_id: formula_Gross_Profit
+    column_id: fact_order_detail::Gross_Profit_Dollar_Amount
     properties:
       column_type: MEASURE
+      aggregation: SUM
   - name: Items Sold
     description: Total quantity of items sold
-    formula_id: formula_Items_Sold
+    column_id: fact_order_detail::Sales_Quantity
     properties:
       column_type: MEASURE
+      aggregation: SUM
   - name: Order Count
     description: Number of unique transactions
     formula_id: formula_Order_Count
@@ -100,14 +119,16 @@ model:
       column_type: MEASURE
   - name: Total Cost
     description: Total cost of goods sold
-    formula_id: formula_Total_Cost
+    column_id: fact_order_detail::Cost_Dollar_Amount
     properties:
       column_type: MEASURE
+      aggregation: SUM
   - name: Total Sales
     description: Total sales revenue in dollars
-    formula_id: formula_Total_Sales
+    column_id: fact_order_detail::Sales_Dollar_Amount
     properties:
       column_type: MEASURE
+      aggregation: SUM
   properties:
     join_progressive: true
     is_bypass_rls: false
