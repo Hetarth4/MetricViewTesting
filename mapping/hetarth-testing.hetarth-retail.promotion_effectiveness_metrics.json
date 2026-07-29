@@ -4,27 +4,27 @@
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "promotion_effectiveness_metrics_model",
     "ts_guid": "3b84ea2f-5cf7-47dd-8436-802e0f4bd13d",
-    "updated_at": "2026-07-29T17:10:24.244802+00:00"
+    "updated_at": "2026-07-29T17:10:39.826481+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.promotion_effectiveness_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "promotion_effectiveness_metrics_model__diet",
     "ts_guid": "bea09fbf-c334-4cac-a705-647f1cc409fc",
-    "updated_at": "2026-07-29T17:10:24.249355+00:00"
+    "updated_at": "2026-07-29T17:10:39.831396+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.promotion_effectiveness_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "promotion_effectiveness_metrics_model__product",
     "ts_guid": "3e665e33-7ce5-4990-92c3-0a05a4164333",
-    "updated_at": "2026-07-29T17:10:24.248125+00:00"
+    "updated_at": "2026-07-29T17:10:39.829905+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.promotion_effectiveness_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "promotion_effectiveness_metrics_model__promotion",
     "ts_guid": "31709626-2f8c-468a-8a7f-ae0bd3bfa96d",
-    "updated_at": "2026-07-29T17:10:24.246659+00:00"
+    "updated_at": "2026-07-29T17:10:39.828260+00:00"
   }
 ]
