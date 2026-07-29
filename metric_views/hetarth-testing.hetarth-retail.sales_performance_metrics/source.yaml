@@ -14,7 +14,11 @@ joins:
     rely:
       at_most_one_match: true
 
-comment: Sales performance KPIs across products and time periods
+comment: "Sales performance KPIs across products and time periods. Measures include\
+  \ total sales, gross profit, margin %, order count, items sold, and average basket\
+  \ value. Dimensions cover order date/month/year, product category/brand/type, transaction\
+  \ type, and tender type. Source: fact_order_detail joined to fact_order_header and\
+  \ dim_product."
 
 dimensions:
   - name: Order Date

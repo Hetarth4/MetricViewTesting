@@ -3,21 +3,21 @@
     "fqn": "hetarth-testing.hetarth-retail.sales_performance_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "sales_performance_metrics_model",
-    "ts_guid": "b23e530a-69c0-41c2-8a15-a6183d8196ed",
-    "updated_at": "2026-07-29T13:26:31.287238+00:00"
+    "ts_guid": "3b84ea2f-5cf7-47dd-8436-802e0f4bd13d",
+    "updated_at": "2026-07-29T17:11:40.975481+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.sales_performance_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "sales_performance_metrics_model__header",
     "ts_guid": "53778eeb-0480-4540-9a94-74383d8f3608",
-    "updated_at": "2026-07-29T13:26:31.289796+00:00"
+    "updated_at": "2026-07-29T17:11:40.978090+00:00"
   },
   {
     "fqn": "hetarth-testing.hetarth-retail.sales_performance_metrics",
     "ts_object_type": "LOGICAL_TABLE",
     "ts_logical_name": "sales_performance_metrics_model__product",
-    "ts_guid": "c513d690-41cb-42fd-9e8d-696d11b0a87f",
-    "updated_at": "2026-07-29T13:26:31.290953+00:00"
+    "ts_guid": "3e665e33-7ce5-4990-92c3-0a05a4164333",
+    "updated_at": "2026-07-29T17:11:40.979540+00:00"
   }
 ]

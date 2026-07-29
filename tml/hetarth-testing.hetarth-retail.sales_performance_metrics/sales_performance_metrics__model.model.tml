@@ -2,7 +2,7 @@ model:
   name: sales_performance_metrics
   model_tables:
   - name: sales_performance_metrics_model
-    fqn: b23e530a-69c0-41c2-8a15-a6183d8196ed
+    fqn: 3b84ea2f-5cf7-47dd-8436-802e0f4bd13d
     joins:
     - with: sales_performance_metrics_model__header
       'on': '[sales_performance_metrics_model::source.POS_Transaction_Number = header.POS_Transaction_Number]'
@@ -15,7 +15,7 @@ model:
   - name: sales_performance_metrics_model__header
     fqn: 53778eeb-0480-4540-9a94-74383d8f3608
   - name: sales_performance_metrics_model__product
-    fqn: c513d690-41cb-42fd-9e8d-696d11b0a87f
+    fqn: 3e665e33-7ce5-4990-92c3-0a05a4164333
   formulas:
   - id: formula_Order_Month
     name: Order Month
