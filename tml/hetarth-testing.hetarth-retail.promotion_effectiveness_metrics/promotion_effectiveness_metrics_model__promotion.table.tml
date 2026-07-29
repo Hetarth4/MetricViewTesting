@@ -1,0 +1,32 @@
+table:
+  name: promotion_effectiveness_metrics_model__promotion
+  db: hetarth-testing
+  schema: hetarth-retail
+  db_table: dim_promotion
+  connection:
+    fqn: c0318fd8-1ac6-4c32-b5ad-026cc2aabed5
+  columns:
+  - name: Brand
+    db_column_name: Brand
+    properties:
+      column_type: ATTRIBUTE
+    description: Brand featured in the promotion
+  - name: Department
+    db_column_name: Department
+    properties:
+      column_type: ATTRIBUTE
+    description: Department of the promoted product
+  - name: Discount
+    db_column_name: Discount
+    properties:
+      column_type: ATTRIBUTE
+  - name: Product
+    db_column_name: Product
+    properties:
+      column_type: ATTRIBUTE
+    description: Promoted product type
+  - name: Region
+    db_column_name: Region
+    properties:
+      column_type: ATTRIBUTE
+    description: Region where the promotion is active

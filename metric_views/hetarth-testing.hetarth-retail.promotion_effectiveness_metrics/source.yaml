@@ -1,0 +1,93 @@
+version: 1.1
+
+source: '`hetarth-testing`.`hetarth-retail`.fact_order_detail'
+
+joins:
+  - name: promotion
+    source: '`hetarth-testing`.`hetarth-retail`.dim_promotion'
+    "on": source.Promotion_Key = promotion.Promotion_Key
+    rely:
+      at_most_one_match: true
+  - name: product
+    source: '`hetarth-testing`.`hetarth-retail`.dim_product'
+    "on": source.Product_Key = product.Product_Key
+    rely:
+      at_most_one_match: true
+  - name: diet
+    source: '`hetarth-testing`.`hetarth-retail`.dim_diet_type'
+    "on": source.Diet_Key = diet.Diet_Key
+    rely:
+      at_most_one_match: true
+
+filter: source.Promotion_Key != 'PROMO000'
+
+comment: "Promotion effectiveness and discount impact KPIs. Excludes non-promoted\
+  \ items (PROMO000). Measures include promoted items sold, promoted revenue, gross\
+  \ profit, margin %, line count, and avg discount applied. Dimensions cover promo\
+  \ brand/department/product/region, discount tier, product category/brand, and diet\
+  \ type. Source: fact_order_detail joined to dim_promotion, dim_product, and dim_diet_type."
+
+dimensions:
+  - name: Promo Brand
+    expr: promotion.Brand
+    comment: Brand featured in the promotion
+
+  - name: Promo Department
+    expr: promotion.Department
+    comment: Department of the promoted product
+
+  - name: Promo Product
+    expr: promotion.Product
+    comment: Promoted product type
+
+  - name: Promo Region
+    expr: promotion.Region
+    comment: Region where the promotion is active
+
+  - name: Discount Tier
+    expr: |-
+      CASE
+        WHEN promotion.Discount <= 0.1 THEN '10% or less'
+        WHEN promotion.Discount <= 0.2 THEN '11-20%'
+        WHEN promotion.Discount <= 0.3 THEN '21-30%'
+        ELSE 'Over 30%'
+      END
+    comment: Promotion discount bracket
+
+  - name: Product Category
+    expr: product.Category
+    comment: Product category
+
+  - name: Product Brand
+    expr: product.Brand
+    comment: Actual product brand
+
+  - name: Diet Type
+    expr: diet.Diet_Type
+    comment: Dietary classification of the product
+
+measures:
+  - name: Promoted Items Sold
+    expr: SUM(source.Sales_Quantity)
+    comment: Total quantity of items sold on promotion
+
+  - name: Promoted Revenue
+    expr: SUM(source.Sales_Dollar_Amount)
+    comment: Total revenue from promoted items
+
+  - name: Promoted Gross Profit
+    expr: SUM(source.Gross_Profit_Dollar_Amount)
+    comment: Gross profit from promoted items
+
+  - name: Promoted Margin Pct
+    expr: "SUM(source.Gross_Profit_Dollar_Amount) / NULLIF(SUM(source.Sales_Dollar_Amount),\
+      \ 0) * 100"
+    comment: Margin percentage on promoted items
+
+  - name: Promotion Line Count
+    expr: COUNT(1)
+    comment: Number of line items with active promotions
+
+  - name: Avg Discount Applied
+    expr: AVG(promotion.Discount) * 100
+    comment: Average promotion discount percentage

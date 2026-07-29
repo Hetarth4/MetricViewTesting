@@ -1,0 +1,18 @@
+table:
+  name: promotion_effectiveness_metrics_model__product
+  db: hetarth-testing
+  schema: hetarth-retail
+  db_table: dim_product
+  connection:
+    fqn: c0318fd8-1ac6-4c32-b5ad-026cc2aabed5
+  columns:
+  - name: Brand
+    db_column_name: Brand
+    properties:
+      column_type: ATTRIBUTE
+    description: Brand featured in the promotion
+  - name: Category
+    db_column_name: Category
+    properties:
+      column_type: ATTRIBUTE
+    description: Product category

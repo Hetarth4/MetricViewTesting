@@ -1,0 +1,113 @@
+model:
+  name: promotion_effectiveness_metrics
+  model_tables:
+  - name: promotion_effectiveness_metrics_model
+    fqn: 3b84ea2f-5cf7-47dd-8436-802e0f4bd13d
+    joins:
+    - with: promotion_effectiveness_metrics_model__promotion
+      'on': '[promotion_effectiveness_metrics_model::source.Promotion_Key = promotion.Promotion_Key]'
+      type: LEFT_OUTER
+      cardinality: MANY_TO_ONE
+    - with: promotion_effectiveness_metrics_model__product
+      'on': '[promotion_effectiveness_metrics_model::source.Product_Key = product.Product_Key]'
+      type: LEFT_OUTER
+      cardinality: MANY_TO_ONE
+    - with: promotion_effectiveness_metrics_model__diet
+      'on': '[promotion_effectiveness_metrics_model::source.Diet_Key = diet.Diet_Key]'
+      type: LEFT_OUTER
+      cardinality: MANY_TO_ONE
+  - name: promotion_effectiveness_metrics_model__diet
+    fqn: bea09fbf-c334-4cac-a705-647f1cc409fc
+  - name: promotion_effectiveness_metrics_model__product
+    fqn: 3e665e33-7ce5-4990-92c3-0a05a4164333
+  - name: promotion_effectiveness_metrics_model__promotion
+    fqn: 31709626-2f8c-468a-8a7f-ae0bd3bfa96d
+  formulas:
+  - id: formula_Discount_Tier
+    name: Discount Tier
+    expr: "if ([promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
+      \ <= 0.1) then '10% or [promotion_effectiveness_metrics_model::less]'\n  WHEN\
+      \ [promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
+      \ <= 0.2 THEN '11-20%'\n  WHEN [promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
+      \ <= 0.3 THEN '21-30%' else 'Over 30%'"
+    description: Promotion discount bracket
+  - id: formula_Promoted_Gross_Profit
+    name: Promoted Gross Profit
+    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Gross_Profit_Dollar_Amount])
+    description: Gross profit from promoted items
+  - id: formula_Promoted_Items_Sold
+    name: Promoted Items Sold
+    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Sales_Quantity])
+    description: Total quantity of items sold on promotion
+  - id: formula_Promoted_Revenue
+    name: Promoted Revenue
+    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Sales_Dollar_Amount])
+    description: Total revenue from promoted items
+  - id: formula_Promotion_Line_Count
+    name: Promotion Line Count
+    expr: count(1)
+    description: Number of line items with active promotions
+  columns:
+  - name: Diet Type
+    description: Dietary classification of the product
+    column_id: promotion_effectiveness_metrics_model__diet::Diet_Type
+    properties:
+      column_type: ATTRIBUTE
+  - name: Discount Tier
+    description: Promotion discount bracket
+    formula_id: formula_Discount_Tier
+    properties:
+      column_type: ATTRIBUTE
+  - name: Product Brand
+    description: Actual product brand
+    column_id: promotion_effectiveness_metrics_model__product::Brand
+    properties:
+      column_type: ATTRIBUTE
+  - name: Product Category
+    description: Product category
+    column_id: promotion_effectiveness_metrics_model__product::Category
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promo Brand
+    description: Brand featured in the promotion
+    column_id: promotion_effectiveness_metrics_model__promotion::Brand
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promo Department
+    description: Department of the promoted product
+    column_id: promotion_effectiveness_metrics_model__promotion::Department
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promo Product
+    description: Promoted product type
+    column_id: promotion_effectiveness_metrics_model__promotion::Product
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promo Region
+    description: Region where the promotion is active
+    column_id: promotion_effectiveness_metrics_model__promotion::Region
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promoted Gross Profit
+    description: Gross profit from promoted items
+    formula_id: formula_Promoted_Gross_Profit
+    properties:
+      column_type: MEASURE
+  - name: Promoted Items Sold
+    description: Total quantity of items sold on promotion
+    formula_id: formula_Promoted_Items_Sold
+    properties:
+      column_type: MEASURE
+  - name: Promoted Revenue
+    description: Total revenue from promoted items
+    formula_id: formula_Promoted_Revenue
+    properties:
+      column_type: MEASURE
+  - name: Promotion Line Count
+    description: Number of line items with active promotions
+    formula_id: formula_Promotion_Line_Count
+    properties:
+      column_type: MEASURE
+  properties:
+    join_progressive: true
+    is_bypass_rls: false

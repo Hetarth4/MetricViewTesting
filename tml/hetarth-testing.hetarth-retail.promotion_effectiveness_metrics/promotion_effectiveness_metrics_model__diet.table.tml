@@ -1,0 +1,13 @@
+table:
+  name: promotion_effectiveness_metrics_model__diet
+  db: hetarth-testing
+  schema: hetarth-retail
+  db_table: dim_diet_type
+  connection:
+    fqn: c0318fd8-1ac6-4c32-b5ad-026cc2aabed5
+  columns:
+  - name: Diet_Type
+    db_column_name: Diet_Type
+    properties:
+      column_type: ATTRIBUTE
+    description: Dietary classification of the product
