@@ -26,5 +26,12 @@
     "ts_logical_name": "promotion_effectiveness_metrics_model__promotion",
     "ts_guid": "31709626-2f8c-468a-8a7f-ae0bd3bfa96d",
     "updated_at": "2026-07-29T17:10:39.828260+00:00"
+  },
+  {
+    "fqn": "hetarth-testing.hetarth-retail.promotion_effectiveness_metrics",
+    "ts_object_type": "MODEL",
+    "ts_logical_name": "promotion_effectiveness_metrics",
+    "ts_guid": "c1dca304-a1d5-5c03-ad5a-8fbd69e5e437",
+    "updated_at": "2026-08-03T15:23:07.908875+00:00"
   }
 ]

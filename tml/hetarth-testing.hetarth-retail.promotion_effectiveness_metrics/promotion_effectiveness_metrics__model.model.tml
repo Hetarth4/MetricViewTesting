@@ -1,48 +1,49 @@
+guid: c1dca304-a1d5-5c03-ad5a-8fbd69e5e437
 model:
   name: promotion_effectiveness_metrics
   model_tables:
-  - name: promotion_effectiveness_metrics_model
-    fqn: 3b84ea2f-5cf7-47dd-8436-802e0f4bd13d
+  - name: fact_order_detail
+    fqn: d19573df-e106-4b11-904a-fe0078da9c01
     joins:
-    - with: promotion_effectiveness_metrics_model__promotion
-      'on': '[promotion_effectiveness_metrics_model::source.Promotion_Key = promotion.Promotion_Key]'
+    - with: dim_promotion
+      'on': '[fact_order_detail::Promotion_Key] = [dim_promotion::Promotion_Key]'
       type: LEFT_OUTER
       cardinality: MANY_TO_ONE
-    - with: promotion_effectiveness_metrics_model__product
-      'on': '[promotion_effectiveness_metrics_model::source.Product_Key = product.Product_Key]'
+    - with: dim_product
+      'on': '[fact_order_detail::Product_Key] = [dim_product::Product_Key]'
       type: LEFT_OUTER
       cardinality: MANY_TO_ONE
-    - with: promotion_effectiveness_metrics_model__diet
-      'on': '[promotion_effectiveness_metrics_model::source.Diet_Key = diet.Diet_Key]'
+    - with: dim_diet_type
+      'on': '[fact_order_detail::Diet_Key] = [dim_diet_type::Diet_Key]'
       type: LEFT_OUTER
       cardinality: MANY_TO_ONE
-  - name: promotion_effectiveness_metrics_model__diet
-    fqn: bea09fbf-c334-4cac-a705-647f1cc409fc
-  - name: promotion_effectiveness_metrics_model__product
-    fqn: 3e665e33-7ce5-4990-92c3-0a05a4164333
-  - name: promotion_effectiveness_metrics_model__promotion
-    fqn: 31709626-2f8c-468a-8a7f-ae0bd3bfa96d
+  - name: dim_promotion
+    fqn: 713023c0-b8c7-4dad-8b03-85b28d64bb10
+  - name: dim_product
+    fqn: 0bb22627-d05e-4be3-9a98-78c16c7410b6
+  - name: dim_diet_type
+    fqn: 914e88a4-7e5f-41fb-884f-c45986ef993d
+  description: 'Promotion effectiveness and discount impact KPIs. Excludes non-promoted
+    items (PROMO000). Measures include promoted items sold, promoted revenue, gross
+    profit, margin %, line count, and avg discount applied. Dimensions cover promo
+    brand/department/product/region, discount tier, product category/brand, and diet
+    type. Source: fact_order_detail joined to dim_promotion, dim_product, and dim_diet_type.'
   formulas:
   - id: formula_Discount_Tier
     name: Discount Tier
-    expr: "if ([promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
-      \ <= 0.1) then '10% or [promotion_effectiveness_metrics_model::less]'\n  WHEN\
-      \ [promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
-      \ <= 0.2 THEN '11-20%'\n  WHEN [promotion_effectiveness_metrics_model::promotion].[promotion_effectiveness_metrics_model::Discount]\
-      \ <= 0.3 THEN '21-30%' else 'Over 30%'"
+    expr: if ([dim_promotion::Discount] <= 0.1) then '10% or less' else if ([dim_promotion::Discount]
+      <= 0.2) then '11-20%' else if ([dim_promotion::Discount] <= 0.3) then '21-30%'
+      else 'Over 30%'
     description: Promotion discount bracket
-  - id: formula_Promoted_Gross_Profit
-    name: Promoted Gross Profit
-    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Gross_Profit_Dollar_Amount])
-    description: Gross profit from promoted items
-  - id: formula_Promoted_Items_Sold
-    name: Promoted Items Sold
-    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Sales_Quantity])
-    description: Total quantity of items sold on promotion
-  - id: formula_Promoted_Revenue
-    name: Promoted Revenue
-    expr: sum([promotion_effectiveness_metrics_model::source].[promotion_effectiveness_metrics_model::Sales_Dollar_Amount])
-    description: Total revenue from promoted items
+  - id: formula_Avg_Discount_Applied
+    name: Avg Discount Applied
+    expr: average([dim_promotion::Discount]) * 100
+    description: Average promotion discount percentage
+  - id: formula_Promoted_Margin_Pct
+    name: Promoted Margin Pct
+    expr: sum([fact_order_detail::Gross_Profit_Dollar_Amount]) / sum([fact_order_detail::Sales_Dollar_Amount])
+      * 100
+    description: Margin percentage on promoted items
   - id: formula_Promotion_Line_Count
     name: Promotion Line Count
     expr: count(1)
@@ -50,7 +51,7 @@ model:
   columns:
   - name: Diet Type
     description: Dietary classification of the product
-    column_id: promotion_effectiveness_metrics_model__diet::Diet_Type
+    column_id: dim_diet_type::Diet_Type
     properties:
       column_type: ATTRIBUTE
   - name: Discount Tier
@@ -60,49 +61,62 @@ model:
       column_type: ATTRIBUTE
   - name: Product Brand
     description: Actual product brand
-    column_id: promotion_effectiveness_metrics_model__product::Brand
+    column_id: dim_product::Brand
     properties:
       column_type: ATTRIBUTE
   - name: Product Category
     description: Product category
-    column_id: promotion_effectiveness_metrics_model__product::Category
+    column_id: dim_product::Category
     properties:
       column_type: ATTRIBUTE
   - name: Promo Brand
     description: Brand featured in the promotion
-    column_id: promotion_effectiveness_metrics_model__promotion::Brand
+    column_id: dim_promotion::Brand
     properties:
       column_type: ATTRIBUTE
   - name: Promo Department
     description: Department of the promoted product
-    column_id: promotion_effectiveness_metrics_model__promotion::Department
+    column_id: dim_promotion::Department
     properties:
       column_type: ATTRIBUTE
   - name: Promo Product
     description: Promoted product type
-    column_id: promotion_effectiveness_metrics_model__promotion::Product
+    column_id: dim_promotion::Product
     properties:
       column_type: ATTRIBUTE
   - name: Promo Region
     description: Region where the promotion is active
-    column_id: promotion_effectiveness_metrics_model__promotion::Region
+    column_id: dim_promotion::Region
     properties:
       column_type: ATTRIBUTE
-  - name: Promoted Gross Profit
-    description: Gross profit from promoted items
-    formula_id: formula_Promoted_Gross_Profit
+  - name: Avg Discount Applied
+    description: Average promotion discount percentage
+    formula_id: formula_Avg_Discount_Applied
     properties:
       column_type: MEASURE
+  - name: Promoted Gross Profit
+    description: Gross profit from promoted items
+    column_id: fact_order_detail::Gross_Profit_Dollar_Amount
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: Promoted Items Sold
     description: Total quantity of items sold on promotion
-    formula_id: formula_Promoted_Items_Sold
+    column_id: fact_order_detail::Sales_Quantity
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+  - name: Promoted Margin Pct
+    description: Margin percentage on promoted items
+    formula_id: formula_Promoted_Margin_Pct
     properties:
       column_type: MEASURE
   - name: Promoted Revenue
     description: Total revenue from promoted items
-    formula_id: formula_Promoted_Revenue
+    column_id: fact_order_detail::Sales_Dollar_Amount
     properties:
       column_type: MEASURE
+      aggregation: SUM
   - name: Promotion Line Count
     description: Number of line items with active promotions
     formula_id: formula_Promotion_Line_Count
