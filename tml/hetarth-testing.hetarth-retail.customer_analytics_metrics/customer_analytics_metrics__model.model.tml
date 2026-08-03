@@ -1,0 +1,147 @@
+guid: 21f1e7a4-4931-55cc-8293-46aa01644317
+model:
+  name: customer_analytics_metrics
+  model_tables:
+  - name: fact_order_header
+    fqn: a3d34975-6a7e-4168-ac9a-8099d757e0b2
+    joins:
+    - with: dim_customer
+      'on': '[fact_order_header::Customer_Key] = [dim_customer::Customer_Key]'
+      type: LEFT_OUTER
+      cardinality: MANY_TO_ONE
+    - with: dim_store
+      'on': '[fact_order_header::Store_Key] = [dim_store::Store_Key]'
+      type: LEFT_OUTER
+      cardinality: MANY_TO_ONE
+  - name: dim_customer
+    fqn: f1b88736-a6c2-45b7-8687-9bffe5d91836
+  - name: dim_store
+    fqn: fa181cf4-8920-4dc0-b797-6733ab0ca6b0
+  description: 'Customer behavior and segmentation KPIs. Measures include transaction
+    count, unique customers, avg transactions per customer, and return rate. Dimensions
+    cover customer region/state, loyalty tier (Bronze/Silver/Gold/None), age group,
+    customer type, occupation, store region, and transaction/tender type. Source:
+    fact_order_header joined to dim_customer and dim_store.'
+  formulas:
+  - id: formula_Age_Group
+    name: Age Group
+    expr: if ([dim_customer::Customer_Age] < 30) then 'Under 30' else if ([dim_customer::Customer_Age]
+      < 45) then '30-44' else if ([dim_customer::Customer_Age] < 60) then '45-59'
+      else '60+'
+    description: Customer age bracket
+  - id: formula_Transaction_Month
+    name: Transaction Month
+    expr: start_of_month([fact_order_header::Timestamp])
+    description: Month of the transaction
+  - id: formula_Transaction_Year
+    name: Transaction Year
+    expr: year([fact_order_header::Timestamp])
+    description: Year of the transaction
+  - id: formula_Avg_Transactions_per_Customer
+    name: Avg Transactions per Customer
+    expr: to_double(count([fact_order_header::POS_Transaction_Number])) / unique count([fact_order_header::Customer_Key])
+    description: Average number of transactions per customer
+  - id: formula_Customers_with_Returns
+    name: Customers with Returns
+    expr: unique count(if ([fact_order_header::Transaction_Type] = 'Return') then
+      [fact_order_header::Customer_Key] else null)
+    description: Number of customers who made returns
+  - id: formula_Return_Rate_Pct
+    name: Return Rate Pct
+    expr: unique count(if ([fact_order_header::Transaction_Type] = 'Return') then
+      [fact_order_header::Customer_Key] else null) * 100.0 / unique count([fact_order_header::Customer_Key])
+    description: Percentage of customers who made returns
+  - id: formula_Unique_Customers
+    name: Unique Customers
+    expr: unique count([fact_order_header::Customer_Key])
+    description: Number of unique customers
+  columns:
+  - name: Age Group
+    description: Customer age bracket
+    formula_id: formula_Age_Group
+    properties:
+      column_type: ATTRIBUTE
+  - name: Customer Region
+    description: Customer home region
+    column_id: dim_customer::Customer_Region
+    properties:
+      column_type: ATTRIBUTE
+  - name: Customer State
+    description: Customer home state
+    column_id: dim_customer::Customer_State
+    properties:
+      column_type: ATTRIBUTE
+  - name: Customer Type
+    description: Individual or Household
+    column_id: dim_customer::Customer_Type
+    properties:
+      column_type: ATTRIBUTE
+  - name: Membership Card
+    description: Customer loyalty tier (Bronze, Silver, Gold)
+    column_id: dim_customer::Store_Membership_Card
+    properties:
+      column_type: ATTRIBUTE
+  - name: Occupation
+    description: Customer occupation
+    column_id: dim_customer::Occupation
+    properties:
+      column_type: ATTRIBUTE
+  - name: Store Name
+    description: Name of the store visited
+    column_id: dim_store::Store_Name
+    properties:
+      column_type: ATTRIBUTE
+  - name: Store Region
+    description: Region of the store visited
+    column_id: dim_store::Store_Region
+    properties:
+      column_type: ATTRIBUTE
+  - name: Tender Type
+    description: Payment method used
+    column_id: fact_order_header::Tender_Type
+    properties:
+      column_type: ATTRIBUTE
+  - name: Transaction Month
+    description: Month of the transaction
+    formula_id: formula_Transaction_Month
+    properties:
+      column_type: ATTRIBUTE
+  - name: Transaction Type
+    description: Purchase, Return, or Exchange
+    column_id: fact_order_header::Transaction_Type
+    properties:
+      column_type: ATTRIBUTE
+  - name: Transaction Year
+    description: Year of the transaction
+    formula_id: formula_Transaction_Year
+    properties:
+      column_type: ATTRIBUTE
+  - name: Avg Transactions per Customer
+    description: Average number of transactions per customer
+    formula_id: formula_Avg_Transactions_per_Customer
+    properties:
+      column_type: MEASURE
+  - name: Customers with Returns
+    description: Number of customers who made returns
+    formula_id: formula_Customers_with_Returns
+    properties:
+      column_type: MEASURE
+  - name: Return Rate Pct
+    description: Percentage of customers who made returns
+    formula_id: formula_Return_Rate_Pct
+    properties:
+      column_type: MEASURE
+  - name: Transaction Count
+    description: Total number of transactions
+    column_id: fact_order_header::POS_Transaction_Number
+    properties:
+      column_type: MEASURE
+      aggregation: COUNT
+  - name: Unique Customers
+    description: Number of unique customers
+    formula_id: formula_Unique_Customers
+    properties:
+      column_type: MEASURE
+  properties:
+    join_progressive: true
+    is_bypass_rls: false

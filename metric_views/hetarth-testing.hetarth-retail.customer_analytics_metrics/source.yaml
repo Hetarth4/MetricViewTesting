@@ -1,0 +1,100 @@
+version: 1.1
+
+source: '`hetarth-testing`.`hetarth-retail`.fact_order_header'
+
+joins:
+  - name: customer
+    source: '`hetarth-testing`.`hetarth-retail`.dim_customer'
+    "on": source.Customer_Key = customer.Customer_Key
+    rely:
+      at_most_one_match: true
+  - name: store
+    source: '`hetarth-testing`.`hetarth-retail`.dim_store'
+    "on": source.Store_Key = store.Store_Key
+    rely:
+      at_most_one_match: true
+
+comment: "Customer behavior and segmentation KPIs. Measures include transaction count,\
+  \ unique customers, avg transactions per customer, and return rate. Dimensions cover\
+  \ customer region/state, loyalty tier (Bronze/Silver/Gold/None), age group, customer\
+  \ type, occupation, store region, and transaction/tender type. Source: fact_order_header\
+  \ joined to dim_customer and dim_store."
+
+dimensions:
+  - name: Transaction Month
+    expr: "DATE_TRUNC('MONTH', source.Timestamp)"
+    comment: Month of the transaction
+
+  - name: Transaction Year
+    expr: YEAR(source.Timestamp)
+    comment: Year of the transaction
+
+  - name: Customer Region
+    expr: customer.Customer_Region
+    comment: Customer home region
+
+  - name: Customer State
+    expr: customer.Customer_State
+    comment: Customer home state
+
+  - name: Membership Card
+    expr: customer.Store_Membership_Card
+    comment: "Customer loyalty tier (Bronze, Silver, Gold)"
+
+  - name: Age Group
+    expr: |-
+      CASE
+        WHEN customer.Customer_Age < 30 THEN 'Under 30'
+        WHEN customer.Customer_Age < 45 THEN '30-44'
+        WHEN customer.Customer_Age < 60 THEN '45-59'
+        ELSE '60+'
+      END
+    comment: Customer age bracket
+
+  - name: Customer Type
+    expr: customer.Customer_Type
+    comment: Individual or Household
+
+  - name: Occupation
+    expr: customer.Occupation
+    comment: Customer occupation
+
+  - name: Store Region
+    expr: store.Store_Region
+    comment: Region of the store visited
+
+  - name: Store Name
+    expr: store.Store_Name
+    comment: Name of the store visited
+
+  - name: Transaction Type
+    expr: source.Transaction_Type
+    comment: "Purchase, Return, or Exchange"
+
+  - name: Tender Type
+    expr: source.Tender_Type
+    comment: Payment method used
+
+measures:
+  - name: Transaction Count
+    expr: COUNT(source.POS_Transaction_Number)
+    comment: Total number of transactions
+
+  - name: Unique Customers
+    expr: COUNT(DISTINCT source.Customer_Key)
+    comment: Number of unique customers
+
+  - name: Avg Transactions per Customer
+    expr: "CAST(COUNT(source.POS_Transaction_Number) AS DOUBLE) / NULLIF(COUNT(DISTINCT\
+      \ source.Customer_Key), 0)"
+    comment: Average number of transactions per customer
+
+  - name: Customers with Returns
+    expr: COUNT(DISTINCT CASE WHEN source.Transaction_Type = 'Return' THEN source.Customer_Key
+      END)
+    comment: Number of customers who made returns
+
+  - name: Return Rate Pct
+    expr: "COUNT(DISTINCT CASE WHEN source.Transaction_Type = 'Return' THEN source.Customer_Key\
+      \ END) * 100.0 / NULLIF(COUNT(DISTINCT source.Customer_Key), 0)"
+    comment: Percentage of customers who made returns

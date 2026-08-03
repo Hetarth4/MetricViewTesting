@@ -1,0 +1,9 @@
+[
+  {
+    "fqn": "hetarth-testing.hetarth-retail.customer_analytics_metrics",
+    "ts_object_type": "MODEL",
+    "ts_logical_name": "customer_analytics_metrics",
+    "ts_guid": "21f1e7a4-4931-55cc-8293-46aa01644317",
+    "updated_at": "2026-08-03T15:24:50.505504+00:00"
+  }
+]
