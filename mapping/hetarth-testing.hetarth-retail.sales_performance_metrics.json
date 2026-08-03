@@ -19,5 +19,12 @@
     "ts_logical_name": "sales_performance_metrics_model__product",
     "ts_guid": "3e665e33-7ce5-4990-92c3-0a05a4164333",
     "updated_at": "2026-07-29T17:27:19.670560+00:00"
+  },
+  {
+    "fqn": "hetarth-testing.hetarth-retail.sales_performance_metrics",
+    "ts_object_type": "MODEL",
+    "ts_logical_name": "sales_performance_metrics",
+    "ts_guid": "e2747b5b-698f-52d8-bd2e-0a9a8792f822",
+    "updated_at": "2026-08-03T15:25:26.187288+00:00"
   }
 ]

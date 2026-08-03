@@ -16,7 +16,7 @@ model:
   - name: fact_order_header
     fqn: a3d34975-6a7e-4168-ac9a-8099d757e0b2
   - name: dim_product
-    fqn: 76a6f2a0-cba3-4144-b1de-3e737040a27e
+    fqn: 0bb22627-d05e-4be3-9a98-78c16c7410b6
   description: 'Sales performance KPIs across products and time periods. Measures
     include total sales, gross profit, margin %, order count, items sold, and average
     basket value. Dimensions cover order date/month/year, product category/brand/type,
@@ -37,13 +37,12 @@ model:
     description: Year of the transaction
   - id: formula_Avg_Basket_Value
     name: Avg Basket Value
-    expr: sum([fact_order_detail::Sales_Dollar_Amount]) / nullif(unique count([fact_order_detail::POS_Transaction_Number]),
-      0)
+    expr: sum([fact_order_detail::Sales_Dollar_Amount]) / unique count([fact_order_detail::POS_Transaction_Number])
     description: Average dollar value per transaction
   - id: formula_Gross_Margin_Pct
     name: Gross Margin Pct
-    expr: sum([fact_order_detail::Gross_Profit_Dollar_Amount]) / nullif(sum([fact_order_detail::Sales_Dollar_Amount]),
-      0) * 100
+    expr: sum([fact_order_detail::Gross_Profit_Dollar_Amount]) / sum([fact_order_detail::Sales_Dollar_Amount])
+      * 100
     description: Gross margin percentage
   - id: formula_Order_Count
     name: Order Count
