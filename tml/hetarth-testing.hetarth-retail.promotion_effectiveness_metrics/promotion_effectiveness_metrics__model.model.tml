@@ -69,11 +69,6 @@ model:
     column_id: dim_product::Category
     properties:
       column_type: ATTRIBUTE
-  - name: Promo Brand
-    description: Brand featured in the promotion
-    column_id: dim_promotion::Brand
-    properties:
-      column_type: ATTRIBUTE
   - name: Promo Department
     description: Department of the promoted product
     column_id: dim_promotion::Department
@@ -87,6 +82,11 @@ model:
   - name: Promo Region
     description: Region where the promotion is active
     column_id: dim_promotion::Region
+    properties:
+      column_type: ATTRIBUTE
+  - name: Promotion Brand Testing
+    description: Brand featured in the promotion
+    column_id: dim_promotion::Brand
     properties:
       column_type: ATTRIBUTE
   - name: Avg Discount Applied

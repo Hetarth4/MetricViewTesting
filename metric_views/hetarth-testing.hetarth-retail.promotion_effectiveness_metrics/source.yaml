@@ -28,7 +28,7 @@ comment: "Promotion effectiveness and discount impact KPIs. Excludes non-promote
   \ type. Source: fact_order_detail joined to dim_promotion, dim_product, and dim_diet_type."
 
 dimensions:
-  - name: Promo Brand
+  - name: Promotion Brand Testing
     expr: promotion.Brand
     comment: Brand featured in the promotion
 
