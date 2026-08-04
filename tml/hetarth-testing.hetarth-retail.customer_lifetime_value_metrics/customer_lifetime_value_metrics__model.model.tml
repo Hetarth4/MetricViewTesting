@@ -123,6 +123,12 @@ model:
     expr: sum_if([fact_order_header::Transaction_Type] = 'Purchase', [fact_order_detail::Sales_Dollar_Amount])
       + sum_if([fact_order_header::Transaction_Type] = 'Return', [fact_order_detail::Sales_Dollar_Amount])
     description: Revenue from purchases minus return deductions
+  - id: formula_Premium_Product_Affinity_Pct
+    name: Premium Product Affinity Pct
+    expr: safe_divide(sum_if(safe_divide([fact_order_detail::Sales_Dollar_Amount],
+      [fact_order_detail::Sales_Quantity]) > 10, 1) * 100.0, count(1))
+    description: Percentage of line items with unit price above  — indicates premium
+      product preference
   - id: formula_Profit_Per_Customer
     name: Profit Per Customer
     expr: safe_divide(sum([fact_order_detail::Gross_Profit_Dollar_Amount]), unique
@@ -235,6 +241,12 @@ model:
   - name: Net Revenue After Returns
     description: Revenue from purchases minus return deductions
     formula_id: formula_Net_Revenue_After_Returns
+    properties:
+      column_type: MEASURE
+  - name: Premium Product Affinity Pct
+    description: Percentage of line items with unit price above  — indicates premium
+      product preference
+    formula_id: formula_Premium_Product_Affinity_Pct
     properties:
       column_type: MEASURE
   - name: Profit Per Customer
