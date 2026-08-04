@@ -105,17 +105,17 @@ model:
     properties:
       column_type: MEASURE
       aggregation: SUM
-  - name: Items Sold
-    description: Total quantity of items sold
-    column_id: fact_order_detail::Sales_Quantity
-    properties:
-      column_type: MEASURE
-      aggregation: SUM
   - name: Order Count
     description: Number of unique transactions
     formula_id: formula_Order_Count
     properties:
       column_type: MEASURE
+  - name: Sold Items
+    description: this is how many items have been sold
+    column_id: fact_order_detail::Sales_Quantity
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
   - name: Total Cost
     description: Total cost of goods sold
     column_id: fact_order_detail::Cost_Dollar_Amount

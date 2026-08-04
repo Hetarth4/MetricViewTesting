@@ -75,9 +75,9 @@ measures:
     expr: COUNT(DISTINCT source.POS_Transaction_Number)
     comment: Number of unique transactions
 
-  - name: Items Sold
+  - name: Sold Items
     expr: SUM(source.Sales_Quantity)
-    comment: Total quantity of items sold
+    comment: this is how many items have been sold
 
   - name: Avg Basket Value
     expr: "SUM(source.Sales_Dollar_Amount) / NULLIF(COUNT(DISTINCT source.POS_Transaction_Number),\
