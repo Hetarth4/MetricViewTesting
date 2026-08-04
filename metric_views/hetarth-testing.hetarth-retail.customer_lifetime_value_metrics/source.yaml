@@ -1,0 +1,256 @@
+version: 1.1
+
+source: '`hetarth-testing`.`hetarth-retail`.fact_order_detail'
+
+joins:
+  - name: header
+    source: '`hetarth-testing`.`hetarth-retail`.fact_order_header'
+    "on": source.POS_Transaction_Number = header.POS_Transaction_Number
+    joins:
+      - name: customer
+        source: '`hetarth-testing`.`hetarth-retail`.dim_customer'
+        "on": header.Customer_Key = customer.Customer_Key
+        rely:
+          at_most_one_match: true
+      - name: store
+        source: '`hetarth-testing`.`hetarth-retail`.dim_store'
+        "on": header.Store_Key = store.Store_Key
+        rely:
+          at_most_one_match: true
+    rely:
+      at_most_one_match: true
+  - name: product
+    source: '`hetarth-testing`.`hetarth-retail`.dim_product'
+    "on": source.Product_Key = product.Product_Key
+    rely:
+      at_most_one_match: true
+
+comment: "Customer lifetime value and behavioral analytics with RFM scoring components,\
+  \ cross-sell penetration, return propensity, spend velocity, and loyalty-weighted\
+  \ profitability. Source: fact_order_detail joined through fact_order_header to dim_customer,\
+  \ dim_store, and dim_product."
+
+dimensions:
+  - name: Customer Region
+    expr: header.customer.Customer_Region
+    comment: Geographic region of the customer
+
+  - name: Loyalty Tier
+    expr: header.customer.Store_Membership_Card
+    comment: "Loyalty program tier (Bronze, Silver, Gold, None)"
+
+  - name: Income Bracket
+    expr: |-
+      CASE
+        WHEN header.customer.Annual_Income < 30000 THEN 'Low (<)'
+        WHEN header.customer.Annual_Income BETWEEN 30000 AND 59999 THEN 'Lower-Mid (-)'
+        WHEN header.customer.Annual_Income BETWEEN 60000 AND 99999 THEN 'Upper-Mid (-)'
+        WHEN header.customer.Annual_Income BETWEEN 100000 AND 149999 THEN 'High (-)'
+        ELSE 'Ultra-High (+)'
+      END
+    comment: Customer income bracket classification
+
+  - name: Customer Tenure Band
+    expr: |-
+      CASE
+        WHEN DATEDIFF(CURRENT_DATE(), header.customer.Customer_Since) < 365 THEN 'New (<1yr)'
+        WHEN DATEDIFF(CURRENT_DATE(), header.customer.Customer_Since) < 730 THEN 'Developing (1-2yr)'
+        WHEN DATEDIFF(CURRENT_DATE(), header.customer.Customer_Since) < 1825 THEN 'Established (2-5yr)'
+        ELSE 'Veteran (5yr+)'
+      END
+    comment: Customer tenure cohort based on registration date
+
+  - name: Occupation
+    expr: header.customer.Occupation
+    comment: Customer occupation category
+
+  - name: Household Composition
+    expr: |-
+      CASE
+        WHEN header.customer.Number_Of_Children = 0 AND header.customer.Marital_Status = 'Single' THEN 'Single No Kids'
+        WHEN header.customer.Number_Of_Children = 0 AND header.customer.Marital_Status != 'Single' THEN 'Couple No Kids'
+        WHEN header.customer.Number_Of_Children BETWEEN 1 AND 2 THEN 'Small Family (1-2 kids)'
+        WHEN header.customer.Number_Of_Children >= 3 THEN 'Large Family (3+ kids)'
+        ELSE 'Unknown'
+      END
+    comment: Household demographic composition
+
+  - name: Payment Method
+    expr: header.Tender_Type
+    comment: Payment method used
+
+  - name: Transaction Type
+    expr: header.Transaction_Type
+    comment: "Purchase, Return, or Exchange"
+
+  - name: Store Region
+    expr: header.store.Store_Region
+    comment: Region of the transacting store
+
+  - name: Product Category
+    expr: product.Category
+    comment: Product category purchased
+
+measures:
+  - name: Total Customer Spend
+    expr: SUM(source.Sales_Dollar_Amount)
+    comment: Total lifetime spend across all transactions
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Avg Order Value
+    expr: "SUM(source.Sales_Dollar_Amount) / NULLIF(COUNT(DISTINCT source.POS_Transaction_Number),\
+      \ 0)"
+    comment: Average revenue per unique transaction
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Frequency Score
+    expr: "COUNT(DISTINCT source.POS_Transaction_Number) * 1.0 / NULLIF(COUNT(DISTINCT\
+      \ header.Customer_Key), 0)"
+    comment: Average number of transactions per customer — RFM frequency component
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Monetary Score
+    expr: "SUM(source.Sales_Dollar_Amount) / NULLIF(COUNT(DISTINCT header.Customer_Key),\
+      \ 0)"
+    comment: Average lifetime monetary value per customer — RFM monetary component
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Return Rate Pct
+    expr: |-
+      COUNT(DISTINCT CASE WHEN header.Transaction_Type = 'Return' THEN source.POS_Transaction_Number END) * 100.0
+      / NULLIF(COUNT(DISTINCT source.POS_Transaction_Number), 0)
+    comment: Percentage of transactions that are returns
+    format:
+      type: percentage
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Net Revenue After Returns
+    expr: |-
+      SUM(CASE WHEN header.Transaction_Type = 'Purchase' THEN source.Sales_Dollar_Amount ELSE 0 END)
+      + SUM(CASE WHEN header.Transaction_Type = 'Return' THEN source.Sales_Dollar_Amount ELSE 0 END)
+    comment: Revenue from purchases minus return deductions
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Cross-Category Penetration
+    expr: "COUNT(DISTINCT product.Category) * 1.0 / NULLIF(COUNT(DISTINCT header.Customer_Key),\
+      \ 0)"
+    comment: Average number of distinct product categories purchased per customer
+      — measures cross-sell depth
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Profit Per Customer
+    expr: "SUM(source.Gross_Profit_Dollar_Amount) / NULLIF(COUNT(DISTINCT header.Customer_Key),\
+      \ 0)"
+    comment: Average gross profit contribution per unique customer
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Loyalty Weighted Revenue
+    expr: |-
+      SUM(
+        source.Sales_Dollar_Amount * CASE
+          WHEN header.customer.Store_Membership_Card = 'Gold' THEN 1.5
+          WHEN header.customer.Store_Membership_Card = 'Silver' THEN 1.25
+          WHEN header.customer.Store_Membership_Card = 'Bronze' THEN 1.1
+          ELSE 1.0
+        END
+      )
+    comment: "Revenue weighted by loyalty tier multiplier — Gold=1.5x, Silver=1.25x,\
+      \ Bronze=1.1x, None=1.0x"
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Spend Velocity
+    expr: |-
+      SUM(source.Sales_Dollar_Amount)
+      / NULLIF(COUNT(DISTINCT DATE_TRUNC('MONTH', header.Timestamp)), 0)
+    comment: Average monthly spend rate (total spend / distinct active months)
+    format:
+      type: currency
+      currency_code: USD
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Basket Complexity Index
+    expr: |-
+      (COUNT(DISTINCT source.Product_Key) * LOG2(COUNT(1) + 1))
+      / NULLIF(COUNT(DISTINCT source.POS_Transaction_Number), 0)
+    comment: Entropy-inspired basket complexity — unique products * log2(items) per
+      transaction
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 3
+
+  - name: Premium Product Affinity Pct
+    expr: |-
+      SUM(CASE WHEN source.Sales_Dollar_Amount / NULLIF(source.Sales_Quantity, 0) > 10 THEN 1 ELSE 0 END) * 100.0
+      / NULLIF(COUNT(1), 0)
+    comment: Percentage of line items with unit price above  — indicates premium product
+      preference
+    format:
+      type: percentage
+      decimal_places:
+        type: exact
+        places: 1
+
+  - name: Multi-Store Shopper Index
+    expr: "COUNT(DISTINCT header.Store_Key) * 1.0 / NULLIF(COUNT(DISTINCT header.Customer_Key),\
+      \ 0)"
+    comment: Average number of distinct stores visited per customer
+    format:
+      type: number
+      decimal_places:
+        type: exact
+        places: 2
+
+  - name: Gross Margin Spread
+    expr: |-
+      (MAX(source.Gross_Profit_Dollar_Amount / NULLIF(source.Sales_Dollar_Amount, 0))
+      - MIN(source.Gross_Profit_Dollar_Amount / NULLIF(source.Sales_Dollar_Amount, 0))) * 100
+    comment: Range between highest and lowest margin items — measures margin consistency
+    format:
+      type: percentage
+      decimal_places:
+        type: exact
+        places: 2

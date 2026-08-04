@@ -1,0 +1,9 @@
+[
+  {
+    "fqn": "hetarth-testing.hetarth-retail.customer_lifetime_value_metrics",
+    "ts_object_type": "MODEL",
+    "ts_logical_name": "customer_lifetime_value_metrics",
+    "ts_guid": "77d28545-f5ff-54b5-80fa-559ce6a00705",
+    "updated_at": "2026-08-04T03:07:33.627396+00:00"
+  }
+]
